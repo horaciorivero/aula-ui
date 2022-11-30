@@ -8,7 +8,7 @@ export default {
   component: Button,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
-    backgroundColor: { control: 'color' },
+    background: { control: 'color' },
   },
 } as ComponentMeta<typeof Button>
 
