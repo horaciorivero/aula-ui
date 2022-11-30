@@ -49,7 +49,7 @@ const createStyles = ({ background, ...props }: StylesProps) => {
     }),
     medium: css({
       fontSize: '14px',
-      padding: '11px 20px',
+      padding: '6px 10px 6px 10px',
     }),
     large: css({
       fontSize: '16px',
@@ -59,6 +59,7 @@ const createStyles = ({ background, ...props }: StylesProps) => {
 
   // button base styles
   const base = css({
+    display: 'flex',
     fontFamily: "'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 700,
     borderRadius: '4px',
@@ -72,20 +73,41 @@ const createStyles = ({ background, ...props }: StylesProps) => {
   return cx(mode, size, base)
 }
 
+interface IconPartProps {
+  icon: React.ReactNode
+}
+
+const ButtonIcon: React.FC<IconPartProps> = ({ icon }) =>
+  icon ? (
+    <div
+      className={css({
+        width: 25,
+        display: 'flex',
+        justifyContent: 'center',
+      })}
+    >
+      {icon}
+    </div>
+  ) : null
+
 interface ButtonProps
   extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+  size?: ButtonSize
   primary?: boolean
   background?: string
-  size?: ButtonSize
+  iconLefth?: React.ReactNode
+  iconRigth?: React.ReactNode
   className?: string
   children: React.ReactNode
 }
 
 export const Button: React.FC<ButtonProps> = ({
-  className,
   primary = false,
   size = 'medium',
   background,
+  iconLefth,
+  iconRigth,
+  className,
   children,
   ...props
 }) => {
@@ -93,7 +115,17 @@ export const Button: React.FC<ButtonProps> = ({
   const styles = createStyles({ size, mode, background })
   return (
     <button className={cx(styles, className)} {...props}>
-      {children}
+      <ButtonIcon icon={iconRigth} />
+      <span
+        className={css({
+          display: 'flex',
+          alignSelf: 'center',
+          margin: '0px 5px 0px 5px',
+        })}
+      >
+        {children}
+      </span>
+      <ButtonIcon icon={iconLefth} />
     </button>
   )
 }
