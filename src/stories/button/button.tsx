@@ -30,45 +30,47 @@ const createButtonStyles = ({ background, ...props }: ButtonStylesProps) => {
   // button mode
   const mode = {
     primary: css({
-      border: 0,
-      color: 'white',
-      background: '#1ea7fd',
+      color: '#FFF',
+      background: '#302666',
+      '&:hover': {
+        background: '#6356A3',
+      },
     }),
     secondary: css({
-      border: '1px solid #333',
-      color: '#333',
-      background: 'transparent',
+      color: '#FFF',
+      background: '#27a8ff',
+      '&:hover': {
+        background: '#5DC7FF',
+      },
     }),
   }[props.mode]
 
   // button size
   const size = {
     small: css({
-      fontSize: '12px',
+      fontSize: '1rem',
       padding: '6px 12px 6px 12px',
     }),
     medium: css({
-      fontSize: '14px',
-      padding: '8px 14px 8px 14px',
+      fontSize: '1rem',
+      padding: '7px 15px 7px 15px',
     }),
     large: css({
-      fontSize: '16px',
-      padding: '10px 16px 10px 16px',
+      fontSize: '1rem',
+      padding: '9px 19px 9px 19px',
     }),
   }[props.size]
 
   // button base styles
   const base = css({
     display: 'flex',
+    color: '#FFF',
     fontFamily: "'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
-    fontWeight: 700,
+    fontWeight: 600,
     borderRadius: '4px',
     cursor: 'pointer',
+    border: 'none',
     background,
-    '&:hover': {
-      color: 'white',
-      background: 'purple',
-    },
   })
 
   return cx(mode, size, base)
@@ -81,20 +83,20 @@ interface IconPartProps {
 }
 
 const ButtonIcon: React.FC<IconPartProps> = ({ icon, size, left }) => {
-  const width = {
-    small: 18,
-    medium: 20,
-    large: 24,
-  }[size]
-
+  const wh = { small: '14px', medium: '16px', large: '18px' }[size]
   return (
     <div
       className={css({
-        width,
+        width: wh,
+        height: wh,
         display: 'flex',
         justifyContent: 'center',
         alignSelf: 'center',
-        ...(left ? { marginRight: 10 } : { marginLeft: 10 }),
+        '& svg': {
+          width: '100%',
+          height: '100%',
+        },
+        ...(left ? { marginRight: '.5em' } : { marginLeft: '.5em' }),
       })}
     >
       {icon}

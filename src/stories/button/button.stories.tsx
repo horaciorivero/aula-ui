@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { IconDownload, Icon123 } from '@tabler/icons'
+import { IconDownload, IconUser } from '@tabler/icons'
 import { Button } from './button'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -48,7 +48,7 @@ Large.args = {
 
 export const IconLeft = Template.bind({})
 IconLeft.args = {
-  iconLeft: <Icon123 />,
+  iconLeft: <IconUser />,
 }
 
 export const IconRight = Template.bind({})
