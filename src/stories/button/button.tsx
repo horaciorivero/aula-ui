@@ -20,13 +20,13 @@ import type { DetailedHTMLProps, ButtonHTMLAttributes } from 'react'
 
 export type ButtonSize = 'small' | 'medium' | 'large'
 
-export interface StylesProps {
+export interface ButtonStylesProps {
   size: ButtonSize
   mode: 'primary' | 'secondary'
   background?: string
 }
 
-const createStyles = ({ background, ...props }: StylesProps) => {
+const createButtonStyles = ({ background, ...props }: ButtonStylesProps) => {
   // button mode
   const mode = {
     primary: css({
@@ -45,15 +45,15 @@ const createStyles = ({ background, ...props }: StylesProps) => {
   const size = {
     small: css({
       fontSize: '12px',
-      padding: '10px 16px',
+      padding: '6px 12px 6px 12px',
     }),
     medium: css({
       fontSize: '14px',
-      padding: '6px 10px 6px 10px',
+      padding: '8px 14px 8px 14px',
     }),
     large: css({
       fontSize: '16px',
-      padding: '12px 24px;',
+      padding: '10px 16px 10px 16px',
     }),
   }[props.size]
 
@@ -66,7 +66,8 @@ const createStyles = ({ background, ...props }: StylesProps) => {
     cursor: 'pointer',
     background,
     '&:hover': {
-      color: 'purple',
+      color: 'white',
+      background: 'purple',
     },
   })
 
@@ -75,57 +76,70 @@ const createStyles = ({ background, ...props }: StylesProps) => {
 
 interface IconPartProps {
   icon: React.ReactNode
+  size: ButtonSize
+  left?: boolean
 }
 
-const ButtonIcon: React.FC<IconPartProps> = ({ icon }) =>
-  icon ? (
+const ButtonIcon: React.FC<IconPartProps> = ({ icon, size, left }) => {
+  const width = {
+    small: 18,
+    medium: 20,
+    large: 24,
+  }[size]
+
+  return (
     <div
       className={css({
-        width: 25,
+        width,
         display: 'flex',
         justifyContent: 'center',
+        alignSelf: 'center',
+        ...(left ? { marginRight: 10 } : { marginLeft: 10 }),
       })}
     >
       {icon}
     </div>
-  ) : null
+  )
+}
 
 interface ButtonProps
   extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   size?: ButtonSize
+  label?: string
   primary?: boolean
   background?: string
-  iconLefth?: React.ReactNode
-  iconRigth?: React.ReactNode
+  iconLeft?: React.ReactNode
+  iconRight?: React.ReactNode
   className?: string
   children: React.ReactNode
 }
 
 export const Button: React.FC<ButtonProps> = ({
   primary = false,
+  label = '',
   size = 'medium',
   background,
-  iconLefth,
-  iconRigth,
+  iconLeft,
+  iconRight,
   className,
   children,
   ...props
 }) => {
   const mode = primary ? 'primary' : 'secondary'
-  const styles = createStyles({ size, mode, background })
+  const styles = createButtonStyles({ size, mode, background })
   return (
     <button className={cx(styles, className)} {...props}>
-      <ButtonIcon icon={iconRigth} />
+      <ButtonIcon left icon={iconLeft} size={size} />
       <span
         className={css({
           display: 'flex',
           alignSelf: 'center',
-          margin: '0px 5px 0px 5px',
+          whiteSpace: 'nowrap',
         })}
       >
-        {children}
+        {label ? label : children}
       </span>
-      <ButtonIcon icon={iconLefth} />
+      <ButtonIcon icon={iconRight} size={size} />
     </button>
   )
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
+import { IconDownload, Icon123 } from '@tabler/icons'
 import { Button } from './button'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -9,6 +10,12 @@ export default {
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     background: { control: 'color' },
+    label: {
+      defaultValue: 'Button',
+      control: {
+        type: 'text',
+      },
+    },
   },
 } as ComponentMeta<typeof Button>
 
@@ -24,12 +31,27 @@ Primary.args = {
 export const Secondary = Template.bind({})
 Secondary.args = {}
 
-export const Large = Template.bind({})
-Large.args = { 
-  size: 'large'
-}
-
 export const Small = Template.bind({})
 Small.args = {
   size: 'small',
+}
+
+export const Medium = Template.bind({})
+Medium.args = {
+  size: 'medium',
+}
+
+export const Large = Template.bind({})
+Large.args = {
+  size: 'large',
+}
+
+export const IconLeft = Template.bind({})
+IconLeft.args = {
+  iconLeft: <Icon123 />,
+}
+
+export const IconRight = Template.bind({})
+IconRight.args = {
+  iconRight: <IconDownload />,
 }
