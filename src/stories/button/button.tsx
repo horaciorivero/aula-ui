@@ -26,6 +26,31 @@ export interface ButtonStylesProps {
   background?: string
 }
 
+type NamedStylesOutput<T> = {
+  [Property in keyof T]: string
+}
+
+type NamedStylesInput<T> = { [P in keyof T]: React.CSSProperties }
+function makeStyles<T extends NamedStylesInput<T> | NamedStylesInput<unknown>>(
+  styles: T | NamedStylesInput<T>
+): NamedStylesOutput<T> {
+  // @ts-ignore
+  return Object.keys(styles).reduce((pv, key) => {
+    return {
+      [key]: css(styles[key]),
+      ...pv,
+    }
+  }, {})
+}
+
+const styles = makeStyles((theme, props) => {
+  root: {
+    width: 100,
+  },
+})
+
+styles.root
+
 const createButtonStyles = ({ background, ...props }: ButtonStylesProps) => {
   // button mode
   const mode = {
@@ -49,15 +74,15 @@ const createButtonStyles = ({ background, ...props }: ButtonStylesProps) => {
   const size = {
     small: css({
       fontSize: '1rem',
-      padding: '6px 12px 6px 12px',
+      padding: '7px 15px 7px 15px',
     }),
     medium: css({
       fontSize: '1rem',
-      padding: '7px 15px 7px 15px',
+      padding: '9px 19px 9px 19px',
     }),
     large: css({
       fontSize: '1rem',
-      padding: '9px 19px 9px 19px',
+      padding: '11px 21px 11px 23px',
     }),
   }[props.size]
 
@@ -80,28 +105,38 @@ interface IconPartProps {
   icon: React.ReactNode
   size: ButtonSize
   left?: boolean
+  className?: string
 }
 
-const ButtonIcon: React.FC<IconPartProps> = ({ icon, size, left }) => {
-  const wh = { small: '14px', medium: '16px', large: '18px' }[size]
+const ButtonIcon: React.FC<IconPartProps> = ({ icon, size, left, className, ...props }) => {
+  const wh = { small: '16px', medium: '18px', large: '20px' }[size]
   return (
     <div
-      className={css({
-        width: wh,
-        height: wh,
-        display: 'flex',
-        justifyContent: 'center',
-        alignSelf: 'center',
-        '& svg': {
-          width: '100%',
-          height: '100%',
-        },
-        ...(left ? { marginRight: '.5em' } : { marginLeft: '.5em' }),
-      })}
+      className={cx(
+        css({
+          width: wh,
+          height: wh,
+          display: 'flex',
+          justifyContent: 'center',
+          alignSelf: 'center',
+          '& svg': {
+            width: '100%',
+            height: '100%',
+          },
+          ...(left ? { marginRight: '.5em' } : { marginLeft: '.5em' }),
+        }),
+        className
+      )}
+      {...props}
     >
       {icon}
     </div>
   )
+}
+
+interface ButtonClasses {
+  root?: string
+  icon?: string
 }
 
 interface ButtonProps
@@ -113,6 +148,7 @@ interface ButtonProps
   iconLeft?: React.ReactNode
   iconRight?: React.ReactNode
   className?: string
+  classes?: ButtonClasses
   children: React.ReactNode
 }
 
@@ -124,14 +160,15 @@ export const Button: React.FC<ButtonProps> = ({
   iconLeft,
   iconRight,
   className,
+  classes,
   children,
   ...props
 }) => {
   const mode = primary ? 'primary' : 'secondary'
   const styles = createButtonStyles({ size, mode, background })
   return (
-    <button className={cx(styles, className)} {...props}>
-      <ButtonIcon left icon={iconLeft} size={size} />
+    <button className={cx(styles, className, classes?.root)} {...props}>
+      <ButtonIcon left icon={iconLeft} size={size} className={classes?.icon} />
       <span
         className={css({
           display: 'flex',
@@ -141,7 +178,7 @@ export const Button: React.FC<ButtonProps> = ({
       >
         {label ? label : children}
       </span>
-      <ButtonIcon icon={iconRight} size={size} />
+      <ButtonIcon icon={iconRight} size={size} className={classes?.icon} />
     </button>
   )
 }
